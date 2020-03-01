@@ -150,7 +150,7 @@ class DiscordClient:
     async def send_voice_identify_payload(self, voice_identify_token, voice_session_id, guild_id):
         voice_identify_payload = copy.deepcopy(self._voice_identify_payload_template)
         voice_identify_payload['d']['server_id'] = guild_id
-        voice_identify_payload['d']['user_id'] = self._bot_id
+        voice_identify_payload['d']['user_id'] = self.BOT_USER_ID
         voice_identify_payload['d']['session_id'] = voice_session_id
         voice_identify_payload['d']['token'] = voice_identify_token
         await self.voice_ws.send(json.dumps(voice_identify_payload))
@@ -208,7 +208,6 @@ class DiscordClient:
             elif msg['t'] == 'GUILD_CREATE':
                 pass
             elif msg['t'] == 'READY':
-                self._bot_id = msg['d']['user']['id']
                 print(f"{msg['d']['user']['username']} successfully logged in!")
             elif msg['t'] == 'VOICE_STATE_UPDATE':
                 if msg['d']['user_id'] == self.TARGET_USER_ID and msg['d'][
